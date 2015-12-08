@@ -24,8 +24,11 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Client_TCP.hpp">
+    <ClInclude Include="Client_TCP_interface.hpp">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Client_TCP.hpp">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -33,9 +36,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="main_TCP_CLIENT.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Client_TCP.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -25,7 +25,7 @@ int main(int argc, char* argv[])
 	//	printf("WSAStartup failed: %d\n", iResult);
 	//	return 1;
 	//}
-	Client_TCP client("localhost",3080);
+	Client_TCP<AF_INET,SOCK_STREAM,IPPROTO_TCP> client("localhost","3080");
 	/*Create socket for the client*/
 	struct addrinfo *result = nullptr,
 					*ptr = nullptr,
