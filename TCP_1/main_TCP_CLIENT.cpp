@@ -13,7 +13,14 @@
 
 #include "Client_TCP.hpp"
 
-int main(int argc, char* argv[]) 
+int main(int argc, char* argv[])
+{
+	Client_TCP<AF_INET, SOCK_STREAM, IPPROTO_TCP> client("localhost", "3080");
+	client.send_data();
+	client.receive_data();
+}
+
+int old_main(int argc, char* argv[]) 
 {
 #define DEFAULT_PORT "3080"
 	//WSADATA wsaData;

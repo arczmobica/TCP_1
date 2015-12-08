@@ -52,11 +52,14 @@ void Client_TCP<AddressFamily, SocketType, ProtocolType>::send_data()
 template<int AddressFamily, int SocketType, int ProtocolType>
 void Client_TCP<AddressFamily, SocketType, ProtocolType>::receive_data()
 {
+	
 	int recvbuflen = DEFAULT_BUFLEN;
 	char recvbuf[DEFAULT_BUFLEN];
+	decltype(recv(socket_, recvbuf, recvbuflen, 0)) iResult {};
+	
 	// Receive data until the server closes the connection
 	do {
-		auto iResult = recv(socket_, recvbuf, recvbuflen, 0);
+		iResult = recv(socket_, recvbuf, recvbuflen, 0);
 		if (iResult > 0)
 			printf("Bytes received: %d\n", iResult);
 		else if (iResult == 0)
