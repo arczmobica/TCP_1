@@ -11,19 +11,21 @@
 
 #pragma comment(lib, "Ws2_32.lib")
 
+#include "Client_TCP.hpp"
+
 int main(int argc, char* argv[]) 
 {
 #define DEFAULT_PORT "3080"
-	WSADATA wsaData;
-	
-	// Initialize Winsock
-	int iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
-	if (iResult != 0) 
-	{
-		printf("WSAStartup failed: %d\n", iResult);
-		return 1;
-	}
-
+	//WSADATA wsaData;
+	//
+	//// Initialize Winsock
+	//int iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
+	//if (iResult != 0) 
+	//{
+	//	printf("WSAStartup failed: %d\n", iResult);
+	//	return 1;
+	//}
+	Client_TCP client("localhost",3080);
 	/*Create socket for the client*/
 	struct addrinfo *result = nullptr,
 					*ptr = nullptr,
@@ -34,7 +36,8 @@ int main(int argc, char* argv[])
 	hints.ai_socktype = SOCK_STREAM;
 	hints.ai_protocol = IPPROTO_TCP;
 
-	iResult = getaddrinfo("localhost", DEFAULT_PORT, &hints, &result);
+
+	auto iResult = getaddrinfo("localhost", DEFAULT_PORT, &hints, &result);
 	if (iResult != 0) 
 	{
 		printf("getaddrinfo failed: %d\n", iResult);
