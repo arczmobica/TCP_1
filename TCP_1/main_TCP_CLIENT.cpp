@@ -18,21 +18,22 @@ int main(int argc, char* argv[])
 	Client_TCP<AF_INET, SOCK_STREAM, IPPROTO_TCP> client("localhost", "3080");
 	client.send_data();
 	client.receive_data();
+	return -1;
 }
 
-int old_main(int argc, char* argv[]) 
+int amain(int argc, char* argv[]) 
 {
 #define DEFAULT_PORT "3080"
-	//WSADATA wsaData;
-	//
-	//// Initialize Winsock
-	//int iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
-	//if (iResult != 0) 
-	//{
-	//	printf("WSAStartup failed: %d\n", iResult);
-	//	return 1;
-	//}
-	Client_TCP<AF_INET,SOCK_STREAM,IPPROTO_TCP> client("localhost","3080");
+	WSADATA wsaData;
+	
+	// Initialize Winsock
+	int iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
+	if (iResult != 0) 
+	{
+		printf("WSAStartup failed: %d\n", iResult);
+		return 1;
+	}
+	//Client_TCP<AF_INET,SOCK_STREAM,IPPROTO_TCP> client("localhost","3080");
 	/*Create socket for the client*/
 	struct addrinfo *result = nullptr,
 					*ptr = nullptr,
@@ -44,7 +45,7 @@ int old_main(int argc, char* argv[])
 	hints.ai_protocol = IPPROTO_TCP;
 
 
-	auto iResult = getaddrinfo("localhost", DEFAULT_PORT, &hints, &result);
+	iResult = getaddrinfo("localhost", DEFAULT_PORT, &hints, &result);
 	if (iResult != 0) 
 	{
 		printf("getaddrinfo failed: %d\n", iResult);

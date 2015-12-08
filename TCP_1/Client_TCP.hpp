@@ -127,7 +127,7 @@ void Client_TCP<AddressFamily, SocketType, ProtocolType>::connect_socket_()
 	// if the connect call failed
 	// But for this simple example we just free the resources
 	// returned by getaddrinfo and print an error message
-
+	 
 	freeaddrinfo(result_);
 
 	
