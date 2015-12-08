@@ -1,0 +1,12 @@
+﻿  stdafx.cpp
+  stdafx.h
+C:\Users\MAOE\Documents\Visual Studio 2015\Projects\TCP_1\TCP_SERVER\stdafx.h(6,9): warning : #pragma once in main file
+  #pragma once
+          ^
+  1 warning generated.
+  main_TCP_SERVER.cpp
+main_TCP_SERVER.cpp(41,6): warning : unused variable 'ptr' [-Wunused-variable]
+                           *ptr = nullptr;
+                            ^
+  1 warning generated.
+  TCP_SERVER.vcxproj -> C:\Users\MAOE\Documents\Visual Studio 2015\Projects\TCP_1\Debug\TCP_SERVER.exe
