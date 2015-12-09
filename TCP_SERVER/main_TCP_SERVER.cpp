@@ -109,8 +109,9 @@ int amain()
 	//send/recv
 #define DEFAULT_BUFLEN 512
 
-	char recvbuf[DEFAULT_BUFLEN];
+	
 	int iSendResult;
+	char recvbuf[DEFAULT_BUFLEN];
 	int recvbuflen = DEFAULT_BUFLEN;
 
 	// Receive until the peer shuts down the connection
