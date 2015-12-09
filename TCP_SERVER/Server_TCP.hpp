@@ -14,6 +14,7 @@ Server_TCP<AddressFamily, SocketType, Protocol, Flags>::Server_TCP(const std::st
 	init_hints_();
 	translate_ANSI_to_address_();
 	init_listener_socket_();
+	bind_socket_();
 }
 
 
@@ -72,4 +73,49 @@ void Server_TCP<AddressFamily, SocketType, Protocol, Flags>::init_listener_socke
 		throw 1;//todo real exceptions
 	}
 }
+
+template<int AddressFamily, int SocketType, int Protocol, int Flags>
+void Server_TCP<AddressFamily, SocketType, Protocol, Flags>::bind_socket_()
+{
+	int iResult = bind(listener_socket_, result_->ai_addr, (int)result_->ai_addrlen);
+	if (iResult == SOCKET_ERROR)
+	{
+		printf("bind failed with error: %d\n", WSAGetLastError());
+		freeaddrinfo(result_);
+		closesocket(listener_socket_);
+		WSACleanup();
+		throw 1;//todo real exceptions
+	}
+	freeaddrinfo(result_);
+}
+
+template<int AddressFamily, int SocketType, int Protocol, int Flags>
+void Server_TCP<AddressFamily, SocketType, Protocol, Flags>::put_socket_in_listening_state_()
+{
+	if (listen(listener_socket_, SOMAXCONN) == SOCKET_ERROR) {
+		printf("Listen failed with error: %d\n", WSAGetLastError());
+		closesocket(listener_socket_);
+		WSACleanup();
+		throw 1;//todo real exceptions
+	}
+}
+
+template<int AddressFamily, int SocketType, int Protocol, int Flags>
+void Server_TCP<AddressFamily, SocketType, Protocol, Flags>::accept_conection_()
+{
+	
+
+
+	// Accept a client socket
+	client_socket_ = accept(listener_socket_, nullptr, nullptr);
+	if (ClientSocket == INVALID_SOCKET) {
+		printf("accept failed: %d\n", WSAGetLastError());
+		closesocket(listener_socket_);
+		WSACleanup();
+		throw 1;//todo real exceptions
+	}
+
+}
+
+
 /*end of private interface*/
