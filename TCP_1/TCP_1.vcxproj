@@ -145,6 +145,7 @@
   <ItemGroup>
     <Text Include="ReadMe.txt" />
     <Text Include="Text.txt" />
+    <Text Include="ToDo.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client_TCP_interface.hpp" />

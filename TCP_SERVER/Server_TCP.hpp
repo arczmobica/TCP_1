@@ -10,7 +10,7 @@ Server_TCP<AddressFamily, SocketType, Protocol, Flags>::Server_TCP(const std::st
 		printf("WSAStartup failed: %d\n", last_result_);
 		throw 1;//todo real exception
 	}
-	make_socket_reusable_(listener_socket_);
+	
 	init_hints_();
 	translate_ANSI_to_address_();
 	init_listener_socket_();
@@ -49,7 +49,7 @@ void Server_TCP<AddressFamily, SocketType, Protocol, Flags>::make_socket_reusabl
 	// lose the pesky "Address already in use" error message
 	if (setsockopt(listener, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int)) == -1)
 	{
-		printf("setsockopt");
+		printf("setsockopt: %d", WSAGetLastError());
 	}
 }
 
@@ -77,6 +77,7 @@ void Server_TCP<AddressFamily, SocketType, Protocol, Flags>::init_listener_socke
 		WSACleanup();
 		throw 1;//todo real exceptions
 	}
+	make_socket_reusable_(listener_socket_);
 }
 
 template<int AddressFamily, int SocketType, int Protocol, int Flags>
