@@ -4,10 +4,10 @@
 template<int AddressFamily, int SocketType, int Protocol, int Flags>
 Server_TCP<AddressFamily, SocketType, Protocol, Flags>::Server_TCP(const std::string& portNumber):port_number_{portNumber}
 {
-	int iResult = WSAStartup(MAKEWORD(2, 2), &wsaData_);
-	if (iResult != 0)
+	last_result_ = WSAStartup(MAKEWORD(2, 2), &wsaData_);
+	if (last_result_ != 0)
 	{
-		printf("WSAStartup failed: %d\n", iResult);
+		printf("WSAStartup failed: %d\n", last_result_);
 		throw 1;//todo real exception
 	}
 	make_socket_reusable_(listener_socket_);
@@ -25,8 +25,11 @@ Server_TCP<AddressFamily, SocketType, Protocol, Flags>::~Server_TCP()
 {//do proper clean up
 
 }
-
-
+template<int AddressFamily, int SocketType, int Protocol, int Flags>
+int Server_TCP<AddressFamily, SocketType, Protocol, Flags>::getLastResult()const
+{
+	return last_result_;
+}
 /*private interface*/
 template<int AddressFamily, int SocketType, int Protocol, int Flags>
 void Server_TCP<AddressFamily, SocketType, Protocol, Flags>::init_hints_()
@@ -53,10 +56,10 @@ void Server_TCP<AddressFamily, SocketType, Protocol, Flags>::make_socket_reusabl
 template<int AddressFamily, int SocketType, int Protocol, int Flags>
 void Server_TCP<AddressFamily, SocketType, Protocol, Flags>::translate_ANSI_to_address_()
 {
-	int iResult = getaddrinfo(nullptr, port_number_.c_str(), &hints_, &result_);
-	if (iResult != 0)
+	last_result_ = getaddrinfo(nullptr, port_number_.c_str(), &hints_, &result_);
+	if (last_result_ != 0)
 	{
-		printf("getaddrinfo failed: %d\n", iResult);
+		printf("getaddrinfo failed: %d\n", last_result_);
 		WSACleanup();
 		throw 1;//todo real exceptions
 	}
@@ -79,8 +82,8 @@ void Server_TCP<AddressFamily, SocketType, Protocol, Flags>::init_listener_socke
 template<int AddressFamily, int SocketType, int Protocol, int Flags>
 void Server_TCP<AddressFamily, SocketType, Protocol, Flags>::bind_socket_()
 {
-	int iResult = bind(listener_socket_, result_->ai_addr, (int)result_->ai_addrlen);
-	if (iResult == SOCKET_ERROR)
+	last_result_ = bind(listener_socket_, result_->ai_addr, (int)result_->ai_addrlen);
+	if (last_result_ == SOCKET_ERROR)
 	{
 		printf("bind failed with error: %d\n", WSAGetLastError());
 		freeaddrinfo(result_);
@@ -116,7 +119,7 @@ void Server_TCP<AddressFamily, SocketType, Protocol, Flags>::accept_conection_()
 }
 
 template<int AddressFamily, int SocketType, int Protocol, int Flags>
-void Server_TCP<AddressFamily, SocketType, Protocol, Flags>::receive_from_client_()
+void Server_TCP<AddressFamily, SocketType, Protocol, Flags>::receive_from_client()
 {
 	const int DEFAULT_BUFLEN{ 512 };
 	
@@ -136,7 +139,7 @@ void Server_TCP<AddressFamily, SocketType, Protocol, Flags>::receive_from_client
 }
 
 template<int AddressFamily, int SocketType, int Protocol, int Flags>
-void Server_TCP<AddressFamily, SocketType, Protocol, Flags>::send_to_client_()
+void Server_TCP<AddressFamily, SocketType, Protocol, Flags>::send_to_client()
 {
 	const int DEFAULT_BUFLEN{ 512 };
 

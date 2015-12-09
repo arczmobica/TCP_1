@@ -21,12 +21,18 @@ void make_socket_reusable(SOCKET& listener)
 	// lose the pesky "Address already in use" error message
 	if (setsockopt(listener, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int)) == -1) 
 	{
-		printf("setsockopt");
+		auto le{ WSAGetLastError() };
+		//printf("setsockopt %d", WSAGetLastError());
 	}
 }
 int main()
 {
 	Server_TCP<AF_INET, SOCK_STREAM, IPPROTO_TCP, AI_PASSIVE> server("3080");
+	do
+	{
+		server.receive_from_client();
+		server.send_to_client();
+	} while (server.getLastResult() > 0);
 	return -1;
 }
 

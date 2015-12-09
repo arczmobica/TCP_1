@@ -20,7 +20,7 @@ private:
 		SOCKET listener_socket_{ INVALID_SOCKET };
 		SOCKET client_socket_{ INVALID_SOCKET };
 		int received_data_length_on_that_socket_;
-
+		int last_result_;
 		void make_socket_reusable_(SOCKET& listener);
 		void init_hints_();
 		void translate_ANSI_to_address_();
@@ -28,11 +28,13 @@ private:
 		void bind_socket_();
 		void put_socket_in_listening_state_();
 		void accept_conection_();
-		void receive_from_client_();
-		void send_to_client_();
+		
 		void perform_cleanup_();
 public:
 	Server_TCP(const std::string& portNumber);
+	int getLastResult()const;
+	void receive_from_client();
+	void send_to_client();
 	virtual ~Server_TCP();
 };
 
