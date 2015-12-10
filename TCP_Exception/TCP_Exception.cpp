@@ -20,3 +20,8 @@ CTCP_Exception::CTCP_Exception():std::runtime_error("No message provided")
 {
     return;
 }
+
+CTCP_Exception::CTCP_Exception(int last_error):std::runtime_error(std::to_string(last_error)),error_no_{last_error}
+{
+
+}

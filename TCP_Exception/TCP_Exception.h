@@ -17,8 +17,11 @@ using std::string;
 // This class is exported from the TCP_Exception.dll
 class TCP_EXCEPTION_API CTCP_Exception : public std::runtime_error
 {
+private:
+	int error_no_;
 public:
 	CTCP_Exception(void);
+	CTCP_Exception(int last_error);
 	// TODO: add your methods here.
 	
 };

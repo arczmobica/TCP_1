@@ -104,10 +104,11 @@ void Client_TCP<AddressFamily, SocketType, ProtocolType>::init_socket_()
 
 	if (socket_ == INVALID_SOCKET)
 	{
-		printf("Error at socket(): %ld\n", WSAGetLastError());
+		auto last_error{ WSAGetLastError() };
+		printf("Error at socket(): %ld\n", last_error);
 		freeaddrinfo(result_);
-		WSACleanup();
-		throw CTCP_Exception();
+		WSACleanup(); 
+		throw CTCP_Exception(last_error);
 	}
 }
 
