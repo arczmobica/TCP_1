@@ -144,6 +144,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
+    <Text Include="Text.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client_TCP_interface.hpp" />

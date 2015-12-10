@@ -11,6 +11,8 @@
 #include <stdio.h>
 #pragma comment(lib, "Ws2_32.lib")
 
+#include "Server_TCP.hpp"
+
 void make_socket_reusable(SOCKET& listener)
 {
 	char yes = 1;
@@ -23,6 +25,12 @@ void make_socket_reusable(SOCKET& listener)
 	}
 }
 int main()
+{
+	Server_TCP<AF_INET, SOCK_STREAM, IPPROTO_TCP, AI_PASSIVE> server("3080");
+	return -1;
+}
+
+int amain()
 {
 #define DEFAULT_PORT "3080"
 	/*Ports below 1024 are considered "privileged" and can only be bound to with an equally privileged user(read: root).*/
