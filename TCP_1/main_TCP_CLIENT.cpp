@@ -12,9 +12,10 @@
 #pragma comment(lib, "Ws2_32.lib")
 
 #include "Client_TCP.hpp"
-
+#include "TCP_Exception.h"
 int main(int argc, char* argv[])
 {
+	CTCP_Exception anException;
 	Client_TCP<AF_INET, SOCK_STREAM, IPPROTO_TCP> client("localhost", "3080");
 	client.send_data();
 	client.receive_data();
