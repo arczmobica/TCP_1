@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "Server_TCP_interface.hpp"
-
+#include "TCP_Exception.h"
 template<int AddressFamily, int SocketType, int Protocol, int Flags>
 Server_TCP<AddressFamily, SocketType, Protocol, Flags>::Server_TCP(const std::string& portNumber):port_number_{portNumber}
 {
@@ -8,7 +8,7 @@ Server_TCP<AddressFamily, SocketType, Protocol, Flags>::Server_TCP(const std::st
 	if (last_result_ != 0)
 	{
 		printf("WSAStartup failed: %d\n", last_result_);
-		throw 1;//todo real exception
+		throw CTCP_Exception();//todo real exception
 	}
 	
 	init_hints_();
@@ -25,11 +25,13 @@ Server_TCP<AddressFamily, SocketType, Protocol, Flags>::~Server_TCP()
 {//do proper clean up
 
 }
+
 template<int AddressFamily, int SocketType, int Protocol, int Flags>
 int Server_TCP<AddressFamily, SocketType, Protocol, Flags>::getLastResult()const
 {
 	return last_result_;
 }
+
 /*private interface*/
 template<int AddressFamily, int SocketType, int Protocol, int Flags>
 void Server_TCP<AddressFamily, SocketType, Protocol, Flags>::init_hints_()
@@ -61,7 +63,7 @@ void Server_TCP<AddressFamily, SocketType, Protocol, Flags>::translate_ANSI_to_a
 	{
 		printf("getaddrinfo failed: %d\n", last_result_);
 		WSACleanup();
-		throw 1;//todo real exceptions
+		throw CTCP_Exception();//todo real exceptions
 	}
 }
 
@@ -75,7 +77,7 @@ void Server_TCP<AddressFamily, SocketType, Protocol, Flags>::init_listener_socke
 		printf("Error at socket(): %d\n", WSAGetLastError());
 		freeaddrinfo(result_);
 		WSACleanup();
-		throw 1;//todo real exceptions
+		throw CTCP_Exception();//todo real exceptions
 	}
 	make_socket_reusable_(listener_socket_);
 }
@@ -90,7 +92,7 @@ void Server_TCP<AddressFamily, SocketType, Protocol, Flags>::bind_socket_()
 		freeaddrinfo(result_);
 		closesocket(listener_socket_);
 		WSACleanup();
-		throw 1;//todo real exceptions
+		throw CTCP_Exception();//todo real exceptions
 	}
 	freeaddrinfo(result_);
 }
@@ -102,7 +104,7 @@ void Server_TCP<AddressFamily, SocketType, Protocol, Flags>::put_socket_in_liste
 		printf("Listen failed with error: %d\n", WSAGetLastError());
 		closesocket(listener_socket_);
 		WSACleanup();
-		throw 1;//todo real exceptions
+		throw CTCP_Exception();//todo real exceptions
 	}
 }
 
@@ -115,7 +117,7 @@ void Server_TCP<AddressFamily, SocketType, Protocol, Flags>::accept_conection_()
 		printf("accept failed: %d\n", WSAGetLastError());
 		closesocket(listener_socket_);
 		WSACleanup();
-		throw 1;//todo real exceptions
+		throw CTCP_Exception();//todo real exceptions
 	}
 }
 
@@ -133,7 +135,7 @@ void Server_TCP<AddressFamily, SocketType, Protocol, Flags>::receive_from_client
 		printf("recv failed: %d\n", WSAGetLastError());
 		closesocket(client_socket_);
 		WSACleanup();
-		throw 1;//todo real exceptions
+		throw CTCP_Exception();//todo real exceptions
 	}
 	printf("Bytes received: %d\n", received_data_length_on_that_socket_);
 	
@@ -151,7 +153,7 @@ void Server_TCP<AddressFamily, SocketType, Protocol, Flags>::send_to_client()
 		printf("send failed: %d\n", WSAGetLastError());
 		closesocket(client_socket_);
 		WSACleanup();
-		throw 1;//todo real exceptions
+		throw CTCP_Exception();//todo real exceptions
 	}
 	printf("Bytes sent: %d\n", iSendResult);
 }

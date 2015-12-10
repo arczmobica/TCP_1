@@ -12,7 +12,7 @@
 #pragma comment(lib, "Ws2_32.lib")
 
 #include "Client_TCP.hpp"
-#include "TCP_Exception.h"
+
 int main(int argc, char* argv[])
 {
 	CTCP_Exception anException;
