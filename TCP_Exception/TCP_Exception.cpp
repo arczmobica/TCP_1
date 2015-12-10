@@ -16,7 +16,7 @@ TCP_EXCEPTION_API int fnTCP_Exception(void)
 
 // This is the constructor of a class that has been exported.
 // see TCP_Exception.h for the class definition
-CTCP_Exception::CTCP_Exception()
+CTCP_Exception::CTCP_Exception():std::runtime_error("No message provided")
 {
     return;
 }

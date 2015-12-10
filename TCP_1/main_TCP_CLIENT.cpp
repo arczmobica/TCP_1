@@ -15,10 +15,20 @@
 
 int main(int argc, char* argv[])
 {
-	CTCP_Exception anException;
-	Client_TCP<AF_INET, SOCK_STREAM, IPPROTO_TCP> client("localhost", "3080");
-	client.send_data();
-	client.receive_data();
+	try
+	{
+		Client_TCP<AF_INET, SOCK_STREAM, IPPROTO_TCP> client("localhost", "3080");
+		client.send_data();
+		client.receive_data();
+	}
+	catch (const CTCP_Exception& ctcp_exception)
+	{
+		cout << "TCP_Exception caught: " << ctcp_exception.what();
+	}
+	catch (...)
+	{
+
+	}
 	return -1;
 }
 

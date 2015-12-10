@@ -11,12 +11,16 @@
 #else
 #define TCP_EXCEPTION_API __declspec(dllimport)
 #endif
-
+#include <stdexcept>
+#include <string>
+using std::string;
 // This class is exported from the TCP_Exception.dll
-class TCP_EXCEPTION_API CTCP_Exception {
+class TCP_EXCEPTION_API CTCP_Exception : public std::runtime_error
+{
 public:
 	CTCP_Exception(void);
 	// TODO: add your methods here.
+	
 };
 
 extern TCP_EXCEPTION_API int nTCP_Exception;
