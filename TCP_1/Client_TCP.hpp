@@ -30,7 +30,7 @@ Client_TCP<AddressFamily, SocketType, ProtocolType>::~Client_TCP()
 template<int AddressFamily, int SocketType, int ProtocolType>
 void Client_TCP<AddressFamily, SocketType, ProtocolType>::send_data()
 {
-#define DEFAULT_BUFLEN 512
+
 
 	
 
@@ -54,10 +54,10 @@ void Client_TCP<AddressFamily, SocketType, ProtocolType>::send_data()
 template<int AddressFamily, int SocketType, int ProtocolType>
 void Client_TCP<AddressFamily, SocketType, ProtocolType>::receive_data()
 {
-	
+	const int DEFAULT_BUFLEN{ 512 };
 	int recvbuflen = DEFAULT_BUFLEN;
 	char recvbuf[DEFAULT_BUFLEN];
-	decltype(recv(socket_, recvbuf, recvbuflen, 0)) iResult {};
+	int iResult {};
 	
 	// Receive data until the server closes the connection
 	do {

@@ -32,7 +32,7 @@ int main()
 	{
 		server.receive_from_client();
 		server.send_to_client();
-	} while (server.getLastResult() > 0);
+	} while (server.dataReceived() > 0);
 	return -1;
 }
 

@@ -32,6 +32,13 @@ int Server_TCP<AddressFamily, SocketType, Protocol, Flags>::getLastResult()const
 	return last_result_;
 }
 
+template<int AddressFamily, int SocketType, int Protocol, int Flags>
+int Server_TCP<AddressFamily, SocketType, Protocol, Flags>::dataReceived()const
+{
+	return received_data_length_on_that_socket_;
+	
+}
+
 /*private interface*/
 template<int AddressFamily, int SocketType, int Protocol, int Flags>
 void Server_TCP<AddressFamily, SocketType, Protocol, Flags>::init_hints_()
@@ -124,12 +131,12 @@ void Server_TCP<AddressFamily, SocketType, Protocol, Flags>::accept_conection_()
 template<int AddressFamily, int SocketType, int Protocol, int Flags>
 void Server_TCP<AddressFamily, SocketType, Protocol, Flags>::receive_from_client()
 {
-	const int DEFAULT_BUFLEN{ 512 };
+	/*const int DEFAULT_BUFLEN{ 512 };
 	
-	char recvbuf[DEFAULT_BUFLEN];
-	int  recvbuflen = DEFAULT_BUFLEN;
+	char recvbuf[DEFAULT_BUFLEN]{};
+	int  recvbuflen = DEFAULT_BUFLEN;*/
 
-	received_data_length_on_that_socket_ = recv(client_socket_, recvbuf, recvbuflen, 0);
+	received_data_length_on_that_socket_ = recv(client_socket_, buffer_.data(), buffer_.size(), 0);
 	if(received_data_length_on_that_socket_ == SOCKET_ERROR)
 	{
 		printf("recv failed: %d\n", WSAGetLastError());
@@ -144,11 +151,11 @@ void Server_TCP<AddressFamily, SocketType, Protocol, Flags>::receive_from_client
 template<int AddressFamily, int SocketType, int Protocol, int Flags>
 void Server_TCP<AddressFamily, SocketType, Protocol, Flags>::send_to_client()
 {
-	const int DEFAULT_BUFLEN{ 512 };
+	/*const int DEFAULT_BUFLEN{ 512 };
 
-	char recvbuf[DEFAULT_BUFLEN];
+	char recvbuf[DEFAULT_BUFLEN];*/
 	// Echo the buffer back to the sender
-	auto iSendResult = send(client_socket_, recvbuf, received_data_length_on_that_socket_, 0);
+	auto iSendResult = send(client_socket_, buffer_.data(), received_data_length_on_that_socket_, 0);
 	if (iSendResult == SOCKET_ERROR) {
 		printf("send failed: %d\n", WSAGetLastError());
 		closesocket(client_socket_);
