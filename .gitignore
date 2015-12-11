@@ -43,7 +43,7 @@ local.properties
 *.sdf
 *.vcxproj.filters
 *.vcxproj
-*.VC.openpdb
+*.VC.opendb
 
 # Build results
 

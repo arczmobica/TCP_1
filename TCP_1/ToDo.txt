@@ -1,0 +1,3 @@
+2[done]. Add real exceptions
+1. Add checks
+a) if port is correctly formated that is, is it int?

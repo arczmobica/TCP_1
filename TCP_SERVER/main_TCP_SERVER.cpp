@@ -21,12 +21,18 @@ void make_socket_reusable(SOCKET& listener)
 	// lose the pesky "Address already in use" error message
 	if (setsockopt(listener, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int)) == -1) 
 	{
-		printf("setsockopt");
+		auto le{ WSAGetLastError() };
+		//printf("setsockopt %d", WSAGetLastError());
 	}
 }
 int main()
 {
 	Server_TCP<AF_INET, SOCK_STREAM, IPPROTO_TCP, AI_PASSIVE> server("3080");
+	do
+	{
+		server.receive_from_client();
+		server.send_to_client();
+	} while (server.dataReceived() > 0);
 	return -1;
 }
 
@@ -109,8 +115,9 @@ int amain()
 	//send/recv
 #define DEFAULT_BUFLEN 512
 
-	char recvbuf[DEFAULT_BUFLEN];
+	
 	int iSendResult;
+	char recvbuf[DEFAULT_BUFLEN];
 	int recvbuflen = DEFAULT_BUFLEN;
 
 	// Receive until the peer shuts down the connection

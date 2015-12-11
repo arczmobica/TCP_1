@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "Client_TCP_interface.hpp"
+#include "TCP_Exception.h"
+
 
 template<int AddressFamily, int SocketType, int ProtocolType>
 Client_TCP<AddressFamily, SocketType, ProtocolType>::Client_TCP(const std::string& hostName, const std::string& portNumber):host_name_{hostName},port_number_{portNumber}
@@ -9,7 +11,7 @@ Client_TCP<AddressFamily, SocketType, ProtocolType>::Client_TCP(const std::strin
 	if (iResult != 0)
 	{
 		printf("WSAStartup failed: %d\n", iResult);
-		throw 1;//throw real exception here
+		throw CTCP_Exception();//throw real exception here
 	}
 	init_hints_();
 	translate_ANSI_to_address_();
@@ -28,7 +30,7 @@ Client_TCP<AddressFamily, SocketType, ProtocolType>::~Client_TCP()
 template<int AddressFamily, int SocketType, int ProtocolType>
 void Client_TCP<AddressFamily, SocketType, ProtocolType>::send_data()
 {
-#define DEFAULT_BUFLEN 512
+
 
 	
 
@@ -43,7 +45,7 @@ void Client_TCP<AddressFamily, SocketType, ProtocolType>::send_data()
 	{
 		printf("send failed: %d\n", WSAGetLastError());
 		perform_clean_up_();
-		throw 1;//todo exceptions
+		throw CTCP_Exception();//todo exceptions
 	}
 
 	printf("Bytes Sent: %ld\n", iResult);
@@ -52,10 +54,10 @@ void Client_TCP<AddressFamily, SocketType, ProtocolType>::send_data()
 template<int AddressFamily, int SocketType, int ProtocolType>
 void Client_TCP<AddressFamily, SocketType, ProtocolType>::receive_data()
 {
-	
+	const int DEFAULT_BUFLEN{ 512 };
 	int recvbuflen = DEFAULT_BUFLEN;
 	char recvbuf[DEFAULT_BUFLEN];
-	decltype(recv(socket_, recvbuf, recvbuflen, 0)) iResult {};
+	int iResult {};
 	
 	// Receive data until the server closes the connection
 	do {
@@ -88,7 +90,7 @@ void Client_TCP<AddressFamily, SocketType, ProtocolType>::translate_ANSI_to_addr
 	{
 		printf("getaddrinfo failed: %d\n", iResult);
 		WSACleanup();
-		throw 1;//throw real exception here
+		throw CTCP_Exception();//throw real exception here
 	}
 }
 
@@ -102,10 +104,11 @@ void Client_TCP<AddressFamily, SocketType, ProtocolType>::init_socket_()
 
 	if (socket_ == INVALID_SOCKET)
 	{
-		printf("Error at socket(): %ld\n", WSAGetLastError());
+		auto last_error{ WSAGetLastError() };
+		printf("Error at socket(): %ld\n", last_error);
 		freeaddrinfo(result_);
-		WSACleanup();
-		throw 1;
+		WSACleanup(); 
+		throw CTCP_Exception(last_error);
 	}
 }
 
@@ -120,7 +123,7 @@ void Client_TCP<AddressFamily, SocketType, ProtocolType>::connect_socket_()
 		socket_ = INVALID_SOCKET;
 		printf("Unable to connect to server!\n");
 		WSACleanup();
-		throw 1;//throw real exception here
+		throw CTCP_Exception();//throw real exception here
 	}
 
 	// Should really try the next address returned by getaddrinfo
@@ -140,7 +143,7 @@ void Client_TCP<AddressFamily, SocketType, ProtocolType>::shut_down_socket_()
 	if (iResult == SOCKET_ERROR) {
 		printf("shutdown failed: %d\n", WSAGetLastError());
 		perform_clean_up_();
-		throw 1;//todo real exception here
+		throw CTCP_Exception();//todo real exception here
 	}
 }
 
